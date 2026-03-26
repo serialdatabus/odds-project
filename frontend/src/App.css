@@ -1,0 +1,536 @@
+body {
+  background-color: #adb3c0;
+}
+.header-sport-fixture {
+  background-color: rgb(143, 163, 9);
+  color: rgb(42, 42, 44);
+  padding: 0.5em;
+  border-radius: 0.5em;
+  text-transform: uppercase;
+  margin: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  font-size: 1em;
+}
+
+.group-sports-fixture {
+  padding: 2em 25%;
+}
+
+.group-sports-fixture > div {
+}
+
+.fixture {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(232, 232, 237);
+  padding: 0.5em;
+  transition: all 0.1s ease-in;
+  border-bottom: 1px solid rgb(184, 179, 179);
+}
+
+.fixture:hover {
+  cursor: pointer;
+  background-color: rgb(195, 195, 212);
+}
+
+.fixture.last {
+  margin-bottom: 3em;
+}
+
+.logo-fixture {
+  width: 5%;
+}
+
+.logo-fixture img {
+  width: 1.5em;
+  height: 1.5em;
+  display: block;
+}
+
+.description-fixture {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+}
+
+.description-fixture .away-team,
+.description-fixture .home-team {
+  width: 40%;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+}
+
+.description-fixture .home-team {
+  padding-left: 1em;
+}
+
+.description-fixture .away-team {
+  text-align: right;
+  padding-right: 1em;
+  display: flex;
+  justify-content: right;
+}
+
+.description-fixture .versus {
+  width: 20%;
+  display: flex;
+  justify-content: space-around;
+  font-weight: bold;
+  font-size: 1em;
+  align-items: center;
+}
+
+.description-fixture .versus .time {
+  color: white;
+  padding: 0.55em;
+  border-radius: 0.5em;
+  background-color: red;
+}
+
+.description-fixture .versus .result {
+  font-size: 1em;
+  width: 1.5em;
+  display: flex;
+  justify-content: center;
+}
+
+.description-fixture * {
+}
+
+.description-fixture > span {
+}
+
+.container-fixture-detail {
+  padding: 2em 10em;
+}
+
+.container-fixture-detail > div {
+  background-color: white;
+}
+
+.container-fixture-detail .header-container {
+  background: #4a6b87;
+  background: -webkit-linear-gradient(
+    180deg,
+    rgba(74, 107, 135, 1) 0%,
+    rgba(34, 73, 92, 1) 54%,
+    rgba(34, 64, 94, 1) 100%
+  );
+  background: -moz-linear-gradient(
+    180deg,
+    rgba(74, 107, 135, 1) 0%,
+    rgba(34, 73, 92, 1) 54%,
+    rgba(34, 64, 94, 1) 100%
+  );
+  background: linear-gradient(
+    180deg,
+    rgba(74, 107, 135, 1) 0%,
+    rgba(34, 73, 92, 1) 54%,
+    rgba(34, 64, 94, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#4A6B87", endColorstr="#22405E", GradientType=0);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 3.3em;
+}
+
+.container-fixture-detail .header-container .fixture-info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container-fixture-detail
+  .header-container
+  .fixture-info-container
+  .team-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container-fixture-detail
+  .header-container
+  .fixture-info-container
+  .team-container
+  .team-name {
+  color: white;
+  font-weight: bold;
+  font-size: 1em;
+  padding: 0 0.3em;
+}
+
+.container-fixture-detail
+  .header-container
+  .fixture-info-container
+  .team-container
+  .team-logo
+  img {
+  width: 5em;
+}
+
+.container-fixture-detail
+  .header-container
+  .fixture-info-container
+  .team-container.right-team
+  .team-logo {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.container-fixture-detail .header-container .score-group {
+  background-color: rgb(35, 35, 45);
+  font-weight: bold;
+  padding: 0.5em 2em;
+  color: white;
+  font-size: 2em;
+  border-radius: 0.3em;
+  margin: 0 0.3em;
+}
+
+.container-fixture-detail .header-container .time-fixture {
+  color: white;
+  background-color: red;
+  border-radius: 90%;
+  padding: 0.5em;
+  font-weight: bold;
+  font-size: 1em;
+  border-color: rgb(213, 255, 4);
+  border-width: 0.2em;
+  border-style: solid;
+  width: 3.1em;
+  height: 3.1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.link-back:hover {
+  cursor: pointer;
+}
+
+#group-markets {
+  padding: 4em;
+}
+
+#group-markets .market {
+  border: 1px solid rgb(155, 210, 227);
+  margin-bottom: 4em;
+}
+
+#group-markets .market > .header-market {
+  background-color: #97c9d3;
+  padding: 0.6em;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #093653;
+}
+
+#group-markets .header-market span{
+    display: flex;
+justify-content: center;
+align-items: center;
+}
+
+
+#group-markets .market > .header-market {
+  display: flex;
+  justify-content: space-between;
+}
+
+#group-markets .market > .header-market a {
+  color: white;
+  background-color: #083654;
+  padding: 0.3em;
+  border-radius: 0.3em;
+  cursor: pointer;
+  transition: 0.3s all;
+  width: 5em;
+  display: flex;
+  justify-content: center;
+}
+
+#group-markets .market > .header-market a:hover {
+  background-color: #22618a;
+}
+
+#group-markets .market > .outcome-container {
+  padding: 0em 0.6em;
+  font-size: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgb(217, 242, 246);
+  flex-direction: column;
+}
+
+#group-markets .market > .outcome-container > div {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5em 0;
+}
+
+#group-markets .market > .outcome-container > div:last-child {
+  border-bottom: rgb(169, 177, 184) 1px solid;
+}
+
+#group-markets .market > .outcome-container:last-child > div:last-child {
+  border-bottom: none;
+}
+
+#group-markets .market > .outcome-container .outcome-name {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#group-markets .market > .outcome-container .odd-info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#group-markets
+  .market
+  > .outcome-container
+  .odd-info-container
+  .bookmaker-image {
+  width: 8em;
+}
+
+
+
+#group-markets .no-odds-message
+{
+ display: flex;
+ justify-content: center;
+}
+
+
+#group-markets .no-odds-message span
+{
+ display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+  margin: 12px 0;
+
+  border-radius: 10px;
+
+  background: linear-gradient(145deg, #020617, #0f172a);
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+
+  color: #94a3b8;
+  font-size: 1em;
+  font-weight: 500;
+  width: 30%;
+
+  text-align: center;
+}
+
+
+#group-markets
+  .market
+  > .outcome-container
+  .odd-info-container
+  .bookmaker-image
+  img,
+#group-markets
+  .market
+  > .outcome-container
+  .odd-info-container
+  .bookmaker-image
+  span {
+  width: 100%;
+  border: 1px solid grey;
+  border-radius: 0.5em;
+}
+
+#group-markets .market > .outcome-container .odd-info-container .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 0.8em;
+  cursor: pointer;
+}
+
+#group-markets
+  .market
+  > .outcome-container
+  .odd-info-container
+  .bookmaker-image
+  span {
+  display: flex;
+  /* flex: 1; */
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 0.3em 0;
+  width: 100%;
+  background: #22465c;
+  border-radius: 0.5em;
+}
+
+#group-markets .market > .outcome-container .odd-info-container .price-outcome {
+  font-weight: bold;
+  margin-right: 0.3em;
+  font-size: 1em;
+  width: 5em;
+  background: #acc252;
+  color: #26282c;
+  text-align: center;
+  padding: 0.3em;
+  border-radius: 0.3em;
+  border: 1px solid #ffffff;
+}
+
+#group-markets .frozen-icon {
+  cursor: pointer;
+  margin-right: 1em;
+  background-color: black;
+  border-radius: 0.3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+#popup-root .popup-content {
+  padding: 0;
+  border: none;
+  top: -5%;
+  width: 30%;
+}
+
+#popup-error-simulation
+{
+    position: relative;
+    padding: 0;
+}
+
+#popup-error-simulation .header-title{
+    
+  background: linear-gradient(
+    180deg,
+    #2f3a4a 0%,
+    #3c485a 50%,
+    #2a3443 100%
+  );
+  
+  color: white;
+
+  font-size:1.3em;
+  padding: 0.3em;
+  box-sizing: border-box;
+  text-align: center;
+
+
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  /* sombra interna leve (efeito premium) */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+
+  top: 0;
+  width: 100%;
+  left: 0;
+
+
+}
+
+
+
+#popup-error-simulation .simulation-group
+{
+
+    padding: 2em;
+
+}
+
+#popup-error-simulation .simulation-item {
+  background: linear-gradient(
+    180deg,
+    #f4f5f7 0%,
+    #e6e8eb 100%
+  );
+
+  border: 1px solid #cfd4da;
+  border-radius: 10px;
+
+  padding: 0.5em 0.5em;
+  
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  /* sombra externa */
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.15),
+    0 1px 0 rgba(255, 255, 255, 0.8) inset;
+
+    margin-bottom: 0.2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.5em;;
+    
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.5s all;
+  border: 0.3em solid rgb(255, 255, 255);
+
+}
+
+
+#popup-error-simulation .simulation-item:hover,
+#popup-error-simulation .simulation-item.selected {
+border: 0.3em solid rgb(56, 177, 56);
+}
+
+
+#popup-error-simulation .btn-close{
+cursor: pointer;
+background-color: red;
+display: flex;
+justify-content: center;
+align-items: center;
+border-radius: 0.2em;;
+}
+
+
+@keyframes pulseFade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#group-markets .odd-simulation-btn-enabled
+{
+  animation: pulseFade 1.5s ease-in-out infinite;
+
+}
+
+
+#group-markets .market > .outcome-container .odd-info-container .bookmaker-image.frozen,
+#group-markets .market > .outcome-container .odd-info-container .price-outcome.frozen {
+    opacity: 0.5;
+}
