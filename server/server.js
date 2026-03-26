@@ -218,23 +218,7 @@ fastify.get("/", async function (request, reply) {
 
   //get bookmakers
   try {
-    // let res = await fetch(
-    //   `https://v5.oddspapi.io/en/bookmakers?apiKey=${API_KEY}`,
-    // );
-    // let data = await res.json();
 
-    // const filtered = data.map((item) => {
-    //   const { slug, bookmakerName, domain, price } = item;
-
-    //   return {
-    //     slug,
-    //     bookmakerName,
-    //     domain,
-    //     price,
-    //   };
-    // });
-
-    // snapshot.bookmakers = filtered;
 
     //get sports
     let res = await fetch(`https://v5.oddspapi.io/en/sports?apiKey=${API_KEY}`);
