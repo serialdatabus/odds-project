@@ -23,7 +23,7 @@ When consuming external APIs in real-time systems, data cannot be blindly truste
 Possible issues include:
 - incorrect odds values
 - wrong fixture mapping
-- invalid market/outcome relationships
+- invalid market or outcome relationships
 - delayed or stale updates
 - inconsistent bookmaker data
 
@@ -37,53 +37,45 @@ This project introduces a validation layer between the data feed and the UI, ens
 
 The system is split into two main parts:
 
-- Backend (Fastify)
-- Frontend (React)
+Backend (Fastify)  
+Frontend (React)
 
 ---
 
 ## High-Level Architecture
 
-External Odds API
-|
-|  REST (fixtures, markets, odds snapshot)
-v
-Backend (Fastify)
-|
-|  normalized responses
-v
-Frontend (React)
-|
-|  WebSocket stream
-v
-Update Handler
-|
-v
-Validation Layer
-|
-v
-State (validated odds)
-|
-v
-UI Rendering
+External Odds API  
+↓  
+Backend (Fastify)  
+↓  
+Frontend (React)  
+↓  
+WebSocket Updates  
+↓  
+Odds Handler  
+↓  
+Validation Layer  
+↓  
+State (validated odds)  
+↓  
+UI Rendering  
 
 
-Snapshot Load
-↓
-Initial State
-↓
-WebSocket Updates
-↓
-Odds Handler
-↓
-Validation Checks
-↓
-Simulation (optional)
-↓
-State Update
-↓
-UI Rendering
-
+Snapshot Load  
+↓  
+Initial State  
+↓  
+WebSocket Updates  
+↓  
+Odds Handler  
+↓  
+Validation Checks  
+↓  
+Simulation  
+↓  
+State Update  
+↓  
+UI Rendering  
 
 ---
 
@@ -97,250 +89,254 @@ Responsibilities:
 - Fetch markets metadata
 - Fetch odds snapshot per fixture
 - Normalize bookmaker odds into a flat structure
-- Build market → outcome → odds mapping
+- Build market and outcome relationships
 - Proxy participant and bookmaker images
 
-Why this matters:
-- simplifies frontend logic
-- avoids inconsistent API structures
-- prepares the system for caching and rate limiting
+This simplifies frontend logic and creates a safer boundary between external data and the UI.
 
 ---
 
 ## Frontend Architecture
 
 The frontend is responsible for:
-- loading initial snapshot
+- loading snapshot data
 - connecting to WebSocket
-- handling real-time updates
+- processing real-time updates
 - validating incoming odds
 - simulating abnormal prices
-- rendering only reliable data
+- rendering only validated data
 
 ---
 
-## Snapshot + WebSocket Strategy
+## Snapshot and Real-Time Strategy
 
-The system uses a hybrid approach:
+The system uses a hybrid model.
 
-Snapshot (REST):
-- provides a consistent starting point
+Snapshot provides a consistent starting point.  
+WebSocket provides incremental updates.
 
-WebSocket:
-- provides real-time updates
-
-Why this is important:
-- avoids incomplete state
-- reduces race conditions
-- ensures stable mapping between fixtures, markets and odds
+This avoids incomplete state and reduces race conditions.
 
 ---
 
 ## Odds Processing Pipeline
 
-Every incoming odd follows this flow:
-
-
-Incoming Odd
-↓
-Normalization
-↓
-Validation
-↓
-Simulation (if enabled)
-↓
-State Update
-↓
-UI Rendering
-
+Incoming Odd  
+↓  
+Normalization  
+↓  
+Validation  
+↓  
+Simulation  
+↓  
+State Update  
+↓  
+UI Rendering  
 
 ---
 
 ## Validation Logic
 
-Validation is applied before storing any odd.
+Validation is applied before any odd is accepted into state.
 
 Checks performed:
 
-1. Structural Validation
-- odd must exist
-- required fields must exist
-- marketId, outcomeId and bookmaker must be valid
+Structural validation ensures the object exists and contains required fields.
 
-2. Activity Check
-- inactive odds are ignored
+Activity validation ensures only active odds are processed.
 
-3. Price Validation
-- decimal price must be within valid range
-- american price must be valid
-- invalid formats are rejected
+Price validation ensures decimal and american prices are within valid ranges.
 
-4. Fixture Consistency
-- odd must belong to the current fixture
+Fixture validation ensures the odd belongs to the current fixture.
 
-5. Market & Outcome Mapping
-- market must exist
-- outcome must belong to that market
+Market validation ensures the market exists inside the fixture.
 
-6. Staleness Protection
-- outdated odds are rejected
+Outcome validation ensures the outcome belongs to the market.
+
+Staleness validation ensures outdated odds are ignored.
 
 ---
 
-## Defensive Design Approach
+## Advanced Validation and Safety Model
 
-The system assumes data may be incorrect.
+This system follows a defensive validation model similar to real trading systems.
 
-Instead of failing:
-- invalid odds are ignored
-- existing odds are marked invalid
-- system continues running safely
+Instead of immediately trusting or removing data, each odd transitions through states.
+
+### Odd Lifecycle
+
+Incoming Odd  
+↓  
+Valid  
+↓  
+Suspicious  
+↓  
+Frozen or Removed  
+
+### Suspicious State
+
+If an odd fails validation temporarily or shows abnormal behaviour:
+- it is not immediately removed
+- it is marked as suspicious
+- the system continues tracking it
+
+This avoids reacting to temporary feed glitches.
+
+### Frozen State
+
+If an odd repeatedly fails validation:
+- it is considered unreliable
+- it is frozen and excluded from decision making
+
+### Removal Strategy
+
+An odd is removed only when:
+- it becomes inactive
+- it no longer belongs to the fixture
+- its market or outcome becomes invalid
+- it is consistently stale
+- it repeatedly fails validation over time
+
+This prevents aggressive removal due to temporary inconsistencies.
+
+---
+
+## Fixture Validation Strategy
+
+Fixtures are also treated as dynamic and potentially unreliable.
+
+A fixture is considered valid only if:
+- it exists in the snapshot
+- it contains valid markets
+- it receives consistent updates
+
+A fixture can be ignored or removed if:
+- it stops receiving updates
+- its structure becomes inconsistent
+- its markets cannot be validated
+- it becomes stale over time
+
+This ensures that the system does not rely on broken fixture data.
+
+---
+
+## Deviation-Based Validation
+
+The system is designed to compare odds within the same market and outcome.
+
+Grouping logic:
+
+marketId + outcomeId
+
+This allows comparing multiple bookmakers offering the same outcome.
+
+Future validation includes:
+- calculating a reference price
+- measuring deviation from the reference
+- increasing fault score when deviation is too high
+
+This mimics real-world anomaly detection in trading systems.
+
+---
+
+## Fault Accumulation Model
+
+Each odd can accumulate faults over time.
+
+When behaviour is abnormal:
+- faults increase
+
+When behaviour stabilizes:
+- faults decrease
+
+When faults exceed a threshold:
+- the odd is considered unreliable
+- it is frozen or removed
+
+This avoids reacting to single anomalies and instead focuses on patterns.
 
 ---
 
 ## Simulation System
 
-The system supports simulation of abnormal scenarios.
+The system includes simulation to test abnormal conditions.
 
-Each odd can have simulation flags:
-- outlier → small variation
-- deviation → medium abnormal change
-- harddeviation → extreme variation
+Each odd may have:
+- outlier behaviour
+- deviation behaviour
+- hard deviation behaviour
 
-Important design choice:
-- simulatedPrice is generated once per update
-- it is stored and reused
-- it is not recalculated per render
+Simulated prices are generated once and stored.
 
-This ensures consistency.
-
----
-
-## Data Model
-
-Each odd contains:
-
-- price → decimal price
-- priceAmerican → american format
-- simulatedPrice → generated once
-- displayPrice → value used for rendering
-- marketId / outcomeId / bookmaker
-- isValid → validation flag
+They are not recalculated on each render, ensuring consistency.
 
 ---
 
 ## Display Logic
 
-The system separates raw data from display logic.
+The system separates data from presentation.
 
-raw data → price / priceAmerican
-simulation → simulatedPrice
-display → displayPrice
+Raw data includes price and priceAmerican.  
+Simulation includes simulatedPrice.  
+Display value is derived dynamically.
 
-
-Display price is determined dynamically:
-
-if simulation enabled → simulatedPrice
-else → price or priceAmerican
+This prevents inconsistencies and keeps logic clean.
 
 ---
 
 ## Real-Time Handling
 
 WebSocket updates are processed using:
-
-- filtering by bookmaker
-- validation before state update
-- normalization of incoming data
-- incremental state updates
+- bookmaker filtering
+- validation before update
+- normalization
+- incremental updates
 
 ---
 
 ## Race Condition Handling
 
-The system avoids crashes by:
-
+The system avoids runtime errors by:
 - ignoring updates when fixture is not ready
-- validating existence before accessing data
-- using refs to access latest state inside async handlers
+- validating existence before access
+- using refs to access latest state
 
 ---
 
 ## State Management
 
 The system uses:
-
 - useImmer for safe updates
-- useRef to avoid stale state in async callbacks
-- separation between:
-  - odds
-  - simulation state
-  - validation flags
+- useRef to avoid stale closures
+- separation of concerns between state types
 
 ---
 
-## Validation Engine (Foundation)
+## Real-World Security Improvements
 
-A validation engine groups odds by:
+If this system was deployed in production:
 
-This prepares the system for:
-- comparing odds across bookmakers
-- detecting abnormal deviations
-- building a reference price
+API keys would be moved to environment variables and never exposed to the frontend.
 
----
+WebSocket connections would be proxied through the backend.
 
-## Future Fault Detection
+Client → Backend → External API
 
-The system is designed to support:
+This would:
+- avoid IP-based rate limits
+- centralize data flow
+- allow validation before broadcasting
+- protect API credentials
 
-- fault accumulation per odd
-- increasing faults on anomalies
-- decreasing faults on recovery
+Validation would run server-side to ensure consistency across all clients.
 
-Possible states:
-- OK
-- SUSPICIOUS
-- FROZEN
+Caching would reduce API pressure.
 
----
+Monitoring would detect abnormal patterns in real time.
 
-## Real-World Improvements
+Simulation would become deterministic instead of random.
 
-If this was production:
-
-### API Key Security
-- move API key to backend env variables
-- never expose in frontend
-
-### WebSocket Proxy Layer
-
-
-
-Benefits:
-- avoid IP limits
-- centralize connection
-- validate before broadcasting
-- share data across users
-
-### Centralized Validation
-- move validation logic to backend
-- ensure consistency across clients
-
-### Caching
-- cache fixtures and markets
-- reduce API calls
-
-### Monitoring
-- detect anomalies
-- track feed stability
-
-### Deterministic Simulation
-- replace random simulation with seeded values
-
-### Containerization
-- Docker for backend and frontend
-- reproducible environments
+Containers would be used for consistent environments.
 
 ---
 
@@ -348,63 +344,47 @@ Benefits:
 
 Due to time constraints:
 
-- validation engine is partially implemented
-- simulation is random
-- frontend connects directly to WebSocket
-- no full fault scoring yet
+validation engine is partially implemented  
+simulation is random  
+frontend connects directly to WebSocket  
+fault scoring system is not fully completed  
 
-These were conscious trade-offs to focus on core validation logic.
+These were conscious decisions to focus on validation architecture.
 
 ---
 
 ## How to Run
 
-### Backend
+Backend
 
-cd server
-npm install
-node index.js
+cd server  
+npm install  
+node index.js  
 
+Runs on  
+http://localhost:3500  
 
-Runs on:
-http://localhost:3500
+Frontend
 
----
+cd frontend  
+npm install  
+npm run dev  
 
-### Frontend
-
-
-cd frontend
-npm install
-npm run dev
-
-
-
-Open:
-http://localhost:5173
+Open  
+http://localhost:5173  
 
 ---
 
 ## Final Thoughts
 
-This project focuses on a key real-world challenge:
+This project focuses on a key challenge in real systems:
 
-Trusting external data without blindly accepting it.
+trusting external data without blindly accepting it
 
 The goal was to build a system that:
 - processes real-time data
 - validates it before use
+- detects abnormal behaviour
 - remains stable under faulty conditions
 
-This approach reflects real-world trading systems where data reliability is critical.
-
-
-
-
-
-
-
-
-
-
-
+This reflects how real trading systems protect themselves from unreliable feeds.
