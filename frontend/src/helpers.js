@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 export const EVENT_UPDATE_FIXTURES = "updatefixtures";
 export const EVENT_UPDATE_ODDS = "updateodds";
 export const EVENT_UPDATE_SCORES = "updatescores";
-export const API_KEY = "82f3a97d9b393012e75b2ceb9d9fcb2e";
+export const API_KEY = "";
 export const ODD_OK = "odd_ok";
 export const ODD_SUSPICIOUS = "odd_suspicious";
 export const ODD_FROZEN = "odd_frozen";

@@ -15,7 +15,7 @@ const FIXTURE_STATE_OK = "ok";
 const FIXTURE_STATE_SUSPECT = "suspect";
 const markets = {};
 
-const API_KEY = "82f3a97d9b393012e75b2ceb9d9fcb2e";
+const API_KEY = "";
 
 function getScores(data) {
   return {
@@ -255,11 +255,6 @@ fastify.get("/", async function (request, reply) {
         return item;
       });
 
-      // console.log("getting fixtures for sport id: "+snapshot.sports[i].sportId+", found "+data.length+" items", "data:",data,"fixtures per sport",TOTAL_FIXTURES_PER_SPORT);
-
-      //   snapshot.fixtures[data.fixtureId] = data;
-
-      // iterate fixtures to add to the object fixtures
 
       for (
         let fixtureIndex = 0;
@@ -273,7 +268,6 @@ fastify.get("/", async function (request, reply) {
         const fixture = data[fixtureIndex];
         const fixtureId = fixture.fixtureId;
 
-        // console.log("fixture id: "+fixtureId," sport",snapshot.sports[i].sportId);
 
         snapshot.fixtures[fixture.fixtureId] = normalizeFixture(fixture);
 
