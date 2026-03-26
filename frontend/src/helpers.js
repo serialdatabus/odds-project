@@ -81,13 +81,12 @@ export function closeConnection(socketRef) {
 }
 
 export function isValidOdd(odd, fixture) {
-    if(!fixture) {
+  if (!fixture) {
     console.log("step_invalid fixture");
-        return;
-    }else{
+    return;
+  } else {
     console.log("step_valid fixture");
-
-    }
+  }
   if (!odd || typeof odd !== "object") return false;
 
   const {
@@ -113,7 +112,7 @@ export function isValidOdd(odd, fixture) {
 
   if (priceAmerican > -100 && priceAmerican < 100) return false;
 
-  console.log({"fixture2": fixture});
+  console.log({ fixture2: fixture });
   if (fixtureId !== fixture.fixtureId) return false;
 
   const market = fixture?.markets?.[marketId];
@@ -206,13 +205,10 @@ export function useOddsValidationEngine({
   oddsSimulationStateRef,
   updateOddsFlags,
 }) {
-
   const odds = oddsRef.current;
   const oddSimulationState = oddsSimulationStateRef.current;
 
-  console.log({updateOddsFlagsEngine: oddSimulationState});
-
-
+  console.log({ updateOddsFlagsEngine: oddSimulationState });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -220,8 +216,6 @@ export function useOddsValidationEngine({
       const oddsList = Object.keys(oddsMap).map((key) => {
         return { ...oddsMap[key], ["id"]: key };
       });
-
-
 
       // 👉 agrupar por outcome
 
@@ -247,85 +241,20 @@ export function useOddsValidationEngine({
       });
 
       console.log({ oddsByMarketOutcome });
-       const oddsByMarketOutcomeIds =  Object.keys(oddsByMarketOutcome);
+      const oddsByMarketOutcomeIds = Object.keys(oddsByMarketOutcome);
       for (let i = 0; i < oddsByMarketOutcomeIds.length; i++) {
-        
         //current market
 
-        const marketOutcomeOdds = oddsByMarketOutcome[oddsByMarketOutcomeIds[i]];
+        const marketOutcomeOdds =
+          oddsByMarketOutcome[oddsByMarketOutcomeIds[i]];
 
-
-
-
-
-        console.log({marketOutcomeOdds});
-        
-   
+        console.log({ marketOutcomeOdds });
       }
 
       // group odds by same market and outcome id
       //so they can be compared
 
-
-
-
-
-
-
-
-
-
-
-
-
-      //       enrichedOdds.forEach((odd) => {
-//         let reference;
-
-//         if (prices.length <= 2) {
-//           const mid = Math.floor(prices.length / 2);
-
-//           reference =
-//             prices.length % 2 === 0
-//               ? (prices[mid - 1] + prices[mid]) / 2
-//               : prices[mid];
-//         } else {
-//           const trimmed = prices.slice(1, prices.length - 1);
-
-//           const mid = Math.floor(trimmed.length / 2);
-
-//           reference =
-//             trimmed.length % 2 === 0
-//               ? (trimmed[mid - 1] + trimmed[mid]) / 2
-//               : trimmed[mid];
-//         }
-
-//         const deviation = Math.abs(odd.displayPrice - reference) / reference;
-
-
-//         updateOddsFlags((draft) => {
-//           const current = draft?.[odd.id] || {
-//             faultsCount: 0,
-//             threshold: ODD_FAULT_THRESHOLD,
-//             lastPrice: 0
-//           };
-
-//           let faultsCount = current.faultsCount;
-
-//           if (deviation > DEVIATION_THRESHOLD) {
-//             faultsCount += FAULT_INCREASE_RATE;
-//           } else {
-//             faultsCount = Math.max(faultsCount - FAULT_RECOVERY_RATE, 0);
-//           }
-
-//           draft[odd.id] = {
-//             faultsCount,
-//             threshold: current.threshold,
-//             lastPrice: odd.price
-//           };
-//         });
-
-
-
+      /* TODO */
     }, 2000);
 
     return () => clearInterval(interval);
